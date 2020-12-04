@@ -24,12 +24,15 @@ const canvasTwo: React.FC = () => {
     var circle = twoRef.current.makeCircle(-70, 0, 50);
     var rect = twoRef.current.makeRectangle(70, 0, 100, 100);
     circle.fill = '#FF8000';
+    circle.stroke = 'orangered';
     rect.fill = 'rgba(0, 200, 255, 0.75)';
+    rect.stroke = '#1C75BC';
 
     var group = twoRef.current.makeGroup(circle, rect);
     group.translation.set(twoRef.current.width / 2, twoRef.current.height / 2);
     group.scale = 0;
-    group.noStroke();
+    // group.noStroke();
+    group.linewidth = 7;
 
     twoRef.current.bind('update', () => update(group));
     twoRef.current.bind('resize', () => resize(group));
