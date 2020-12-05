@@ -10,38 +10,62 @@ const params = {
 const canvasTwo: React.FC = () => {
   var stageRef = useRef();
   var twoRef = useRef<Two>();
+  const [stateGroup, setGroup] = React.useState<Two.Group>();
 
   useEffect(setup, []);
 
   function setup() {
-    const stage = stageRef.current as HTMLDivElement;
     twoRef.current = new Two(params);
+    const stage = stageRef.current as HTMLDivElement;
+    const two = twoRef.current;
 
     if(stage.children.length < 1)
-      twoRef.current.appendTo(stageRef.current);
+      two.appendTo(stageRef.current);
 
     // Add any shapes you'd like here
-    var circle = twoRef.current.makeCircle(-70, 0, 50);
-    var rect = twoRef.current.makeRectangle(70, 0, 100, 100);
+    // createShapes(two);
+    var circle = two.makeCircle(-70, 0, 50);
+    var rect = two.makeRectangle(70, 0, 100, 100);
     circle.fill = '#FF8000';
     circle.stroke = 'orangered';
     rect.fill = 'rgba(0, 200, 255, 0.75)';
     rect.stroke = '#1C75BC';
 
-    var group = twoRef.current.makeGroup(circle, rect);
-    group.translation.set(twoRef.current.width / 2, twoRef.current.height / 2);
-    group.scale = 0;
+    var group = two.makeGroup(circle, rect);
+    // two.add(group);
+    group.translation.set(two.width / 2, two.height / 2);
+    group.scale = 1;
     // group.noStroke();
     group.linewidth = 7;
+    setGroup(group);
 
-    twoRef.current.bind('update', () => update(group));
-    twoRef.current.bind('resize', () => resize(group));
+    two.bind('update', () => update(group));
+    two.bind('resize', () => resize(group));
+    // two.bind('update', () => update(stateGroup));
+    // two.bind('resize', () => resize(stateGroup));
 
     return function() {
       // Unmount handler
-      twoRef.current.unbind('update', update);
-      twoRef.current.unbind('resize', resize);
+      two.unbind('update', update);
+      two.unbind('resize', resize);
     }
+  }
+
+  function createShapes(two: Two) {
+    var circle = two.makeCircle(-70, 0, 50);
+    var rect = two.makeRectangle(70, 0, 100, 100);
+    circle.fill = '#FF8000';
+    circle.stroke = 'orangered';
+    rect.fill = 'rgba(0, 200, 255, 0.75)';
+    rect.stroke = '#1C75BC';
+
+    var group = two.makeGroup(circle, rect);
+    // two.add(group);
+    group.translation.set(two.width / 2, two.height / 2);
+    group.scale = 1;
+    // group.noStroke();
+    group.linewidth = 7;
+    setGroup(group);
   }
 
   function resize(group) {
