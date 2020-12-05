@@ -22,30 +22,16 @@ const canvasTwo: React.FC = () => {
     if(stage.children.length < 1)
       two.appendTo(stageRef.current);
 
-    // Add any shapes you'd like here
-    // createShapes(two);
-    // var circle = two.makeCircle(-70, 0, 50);
-    // var rect = two.makeRectangle(70, 0, 100, 100);
-    // circle.fill = '#FF8000';
-    // circle.stroke = 'orangered';
-    // rect.fill = 'rgba(0, 200, 255, 0.75)';
-    // rect.stroke = '#1C75BC';
+    const grid = makePixelGrid(two, two.width, two.height, 40);
+    console.log(grid)
+    const group = two.makeGroup(grid);
 
-    // var group = two.makeGroup(circle, rect);
-    // // two.add(group);
-    // group.translation.set(two.width / 2, two.height / 2);
-    // group.scale = 1;
-    // // group.noStroke();
-    // group.linewidth = 7;
-    // // setGroup(group);
-    // const rects = makeRowOfPixels(two, two.width, 0, 40);
-    const rects = makePixelGrid(two, two.width, two.height, 40);
-    const group = two.makeGroup(rects);
+    const rects = document.querySelector('.stage > svg > g > g').children;
+    console.log(rects.length);
+    console.log(rects);
 
     two.bind('update', () => update(group));
     two.bind('resize', () => resize(group));
-    // two.bind('update', () => update(stateGroup));
-    // two.bind('resize', () => resize(stateGroup));
 
     return function() {
       // Unmount handler
@@ -70,6 +56,8 @@ const canvasTwo: React.FC = () => {
 
     for(let index = 0; index < width; index += size) {
       const rect = two.makeRectangle(index, position, size, size);
+
+      rect.translation
       rect.fill = '#1c75bc';
       // rect.noStroke();
       rectangles.push(rect)
