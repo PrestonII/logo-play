@@ -65,7 +65,8 @@ const canvasTwo: React.FC = () => {
     two.clear()
     two.appendTo(stageRef.current);
 
-    const grid = makePixelGrid(two, two.width, two.height, 40);
+    const pixelSize = 40;
+    const grid = makePixelGrid(two, two.width, two.height, pixelSize);
     // const element = grid[501];
     // element.scale = 0;
 
@@ -79,7 +80,11 @@ const canvasTwo: React.FC = () => {
   function confirmLoad() {
     if(!isLoaded) 
       return;
+    console.log('LOAD COMPLETE!');
+    animateGrid();
+  }
 
+  function animateGrid() {
     const rects = document.querySelector('.stage > svg > g').children;
     const limit = rects.length;
     const nums = Array.from(Array(limit).keys());
@@ -88,12 +93,11 @@ const canvasTwo: React.FC = () => {
 
     const timeline = new Timeline({paused: true});
     console.log(element);
-    timeline.from(element, {opacity: 0, y: -50, duration: 1}, 0);
-    // timeline.to(element, { fillOpacity: .25, duration: 1});
+    timeline
+      .from(rects, { opacity: 0, stagger: .005 , y: 150 , ease: Power1.easeInOut }, 1)
+    
     // setShapes(element);
     timeline.play();
-
-    console.log('LOAD COMPLETE!');
   }
 
   function makePixelGrid(two: Two, width: number, height: number, size: number): Two.Rectangle[] {
@@ -116,7 +120,7 @@ const canvasTwo: React.FC = () => {
       rect.translation
       rect.fill = '#1c75bc';
       // rect.scale = 0;
-      // rect.noStroke();
+      rect.noStroke();
       rectangles.push(rect)
     }
 
