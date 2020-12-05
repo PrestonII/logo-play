@@ -11,7 +11,7 @@ const params = {
 const canvasTwo: React.FC = () => {
   var stageRef = useRef();
   const [two, setTwo] = React.useState<Two>();
-  const [shapes, setShapes] = React.useState<Two.Object>(null);
+  const [shapes, setShapes] = React.useState<Two.Object[]>(null);
   const [isLoaded, setLoaded] = React.useState(false);
 
   useEffect(mount, []);
@@ -66,10 +66,10 @@ const canvasTwo: React.FC = () => {
     two.appendTo(stageRef.current);
 
     const grid = makePixelGrid(two, two.width, two.height, 40);
-    const element = grid[501];
-    element.scale = 0;
+    // const element = grid[501];
+    // element.scale = 0;
 
-    setShapes(element);
+    setShapes(grid);
     
     // setShapes(grid)
     // const group = two.makeGroup(grid);
@@ -84,9 +84,14 @@ const canvasTwo: React.FC = () => {
     const limit = rects.length;
     const nums = Array.from(Array(limit).keys());
 
-    const element = rects[15];
+    const element = rects[501];
 
+    const timeline = new Timeline({paused: true});
+    console.log(element);
+    timeline.from(element, {opacity: 0, y: -50, duration: 1}, 0);
+    // timeline.to(element, { fillOpacity: .25, duration: 1});
     // setShapes(element);
+    timeline.play();
 
     console.log('LOAD COMPLETE!');
   }
@@ -110,6 +115,7 @@ const canvasTwo: React.FC = () => {
 
       rect.translation
       rect.fill = '#1c75bc';
+      // rect.scale = 0;
       // rect.noStroke();
       rectangles.push(rect)
     }
@@ -134,12 +140,6 @@ const canvasTwo: React.FC = () => {
     if(!two || !shapes)
       return;
 
-    if (shapes.scale > 0.9999) {
-      shapes.scale = shapes.rotation = 0;
-    }
-    var t = (1 - shapes.scale) * 0.125;
-    shapes.scale += t;
-    shapes.rotation += t * 4 * Math.PI;
   }
 
   return (
