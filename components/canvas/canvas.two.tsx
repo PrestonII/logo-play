@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Two from 'two.js';
+import { TimelineMax as Timeline, Power1, gsap } from 'gsap';
 import styles from './canvas.module.scss';
 
 const params = {
@@ -10,7 +11,7 @@ const params = {
 const canvasTwo: React.FC = () => {
   var stageRef = useRef();
   const [two, setTwo] = React.useState<Two>();
-  const [shapes, setShapes] = React.useState<Element>(null);
+  const [shapes, setShapes] = React.useState<Two.Object>(null);
   const [isLoaded, setLoaded] = React.useState(false);
 
   useEffect(mount, []);
@@ -65,6 +66,10 @@ const canvasTwo: React.FC = () => {
     two.appendTo(stageRef.current);
 
     const grid = makePixelGrid(two, two.width, two.height, 40);
+    const element = grid[501];
+    element.scale = 0;
+
+    setShapes(element);
     
     // setShapes(grid)
     // const group = two.makeGroup(grid);
@@ -78,8 +83,10 @@ const canvasTwo: React.FC = () => {
     const rects = document.querySelector('.stage > svg > g').children;
     const limit = rects.length;
     const nums = Array.from(Array(limit).keys());
-    
-    
+
+    const element = rects[15];
+
+    // setShapes(element);
 
     console.log('LOAD COMPLETE!');
   }
@@ -124,10 +131,15 @@ const canvasTwo: React.FC = () => {
   }
 
   function update() {
-    if(!two)
+    if(!two || !shapes)
       return;
 
-    // console.log('updating!');
+    if (shapes.scale > 0.9999) {
+      shapes.scale = shapes.rotation = 0;
+    }
+    var t = (1 - shapes.scale) * 0.125;
+    shapes.scale += t;
+    shapes.rotation += t * 4 * Math.PI;
   }
 
   return (
