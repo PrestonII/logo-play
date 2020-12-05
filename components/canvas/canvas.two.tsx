@@ -22,7 +22,7 @@ const canvasTwo: React.FC = () => {
     const newTwo = new Two(params);
     setTwo(newTwo);
 
-    return unmount(newTwo);
+    return two ? unmount(newTwo) : () => {};
   }
 
   function unmount(two: Two) {
@@ -34,8 +34,10 @@ const canvasTwo: React.FC = () => {
   }
 
   function makeStage() {
-    if(two !== undefined && two !== null)
-      loadStage();
+    if(!two)
+      return;
+
+    loadStage();
 
     return function() {
       console.log('Detaching stage...');
