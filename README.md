@@ -13,13 +13,9 @@ yarn dev
 
 ## Next Up?
 
-First, run the development server:
+We're going to try and build this thing:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+![animation](https://i.gyazo.com/8314ca8bbcc0abd35fe92e97e3f70962.gif)
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
