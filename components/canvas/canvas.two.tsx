@@ -14,7 +14,7 @@ const canvasTwo: React.FC = () => {
   const [isLoaded, setLoaded] = React.useState(false);
 
   useEffect(mount, []);
-  useEffect(makeStage, [two]);
+  useEffect(attachStage, [two]);
   useEffect(confirmLoad, [isLoaded]);
 
   function mount() {
@@ -36,42 +36,52 @@ const canvasTwo: React.FC = () => {
     console.log('UNMOUNT COMPLETE!');
   }
 
-  function makeStage() {
+  function attachStage() {
     if(two)
       loadStage();
 
-    return function() {
-      if(!two)
-        return;
+    return detachStage();
+  }
 
-      console.log('Detaching stage...');
-    }
+  function detachStage() {
+    if(!two)
+      return;
+
+    console.log('Detaching stage...');
+    console.log('STAGE DETACHMENT COMPLETE!');
   }
 
   function loadStage() {
     const stage = stageRef.current as HTMLDivElement;
-    if(stage.children.length < 1)
-      two.appendTo(stageRef.current);
-
-    const grid = makePixelGrid(two, two.width, two.height, 40);
-    console.log(grid)
-    const group = two.makeGroup(grid);
-    
-
-    // const rects = document.querySelector('.stage > svg > g > g');
-    // const limit = rects.length;
-    // const ranNums = Array.from(Array(limit).keys());
-    // console.log(ranNums);
-    // console.log(rects.length);
-    // console.log(rects);
     two.bind(Two.Events.update.toString(), update);
     two.bind(Two.Events.resize.toString(), resize);
+    // two.bind(Two.Events.insert.toString(), () => console.log('insert'));
+    // two.bind(Two.Events.load.toString(), () => console.log('load'));
+    // two.bind(Two.Events.change.toString(), () => console.log('change'));
+    // two.bind(Two.Events.play.toString(), () => console.log('play'));
+    // two.bind(Two.Events.order.toString(), () => console.log('order'));
+
+    two.clear()
+    two.appendTo(stageRef.current);
+
+    const grid = makePixelGrid(two, two.width, two.height, 40);
+    
+    // setShapes(grid)
+    // const group = two.makeGroup(grid);
     setLoaded(true);
   }
 
   function confirmLoad() {
-    if(isLoaded)
-      console.log('LOAD COMPLETE!');
+    if(!isLoaded) 
+      return;
+
+    const rects = document.querySelector('.stage > svg > g').children;
+    const limit = rects.length;
+    const nums = Array.from(Array(limit).keys());
+    
+    
+
+    console.log('LOAD COMPLETE!');
   }
 
   function makePixelGrid(two: Two, width: number, height: number, size: number): Two.Rectangle[] {
