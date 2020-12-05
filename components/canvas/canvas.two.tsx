@@ -22,24 +22,28 @@ const canvasTwo: React.FC = () => {
     const newTwo = new Two(params);
     setTwo(newTwo);
 
-    return two ? unmount(newTwo) : () => {};
+    return unmount(newTwo);
   }
 
-  function unmount(two: Two) {
+  function unmount(passedTwo: Two) {
+    if(!two)
+      return;
+
     console.log('unmounting...');
     setLoaded(false);
-    two.unbind('update', update);
-    two.unbind('resize', resize);
+    passedTwo.unbind('update', update);
+    passedTwo.unbind('resize', resize);
     console.log('UNMOUNT COMPLETE!');
   }
 
   function makeStage() {
-    if(!two)
-      return;
-
-    loadStage();
+    if(two)
+      loadStage();
 
     return function() {
+      if(!two)
+        return;
+
       console.log('Detaching stage...');
     }
   }
