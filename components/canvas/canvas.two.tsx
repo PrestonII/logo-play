@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Two from 'two.js';
-import { TimelineMax as Timeline, Power1, gsap } from 'gsap';
+import { TimelineMax as Timeline, Power4, gsap } from 'gsap';
 import styles from './canvas.module.scss';
+import { shuffle } from '../../shared/lib/utils';
 
 const params = {
   autostart: true,
@@ -67,13 +68,8 @@ const canvasTwo: React.FC = () => {
 
     const pixelSize = 40;
     const grid = makePixelGrid(two, two.width, two.height, pixelSize);
-    // const element = grid[501];
-    // element.scale = 0;
 
     setShapes(grid);
-    
-    // setShapes(grid)
-    // const group = two.makeGroup(grid);
     setLoaded(true);
   }
 
@@ -85,16 +81,12 @@ const canvasTwo: React.FC = () => {
   }
 
   function animateGrid() {
-    const rects = document.querySelector('.stage > svg > g').children;
+    const children = Array.from(document.querySelector('.stage > svg > g').children);
+    const rects = shuffle(children);
     const limit = rects.length;
-    const nums = Array.from(Array(limit).keys());
-
-    const element = rects[501];
-
     const timeline = new Timeline({paused: true});
-    console.log(element);
-    timeline
-      .from(rects, { opacity: 0, stagger: .005 , y: 150 , ease: Power1.easeInOut }, 1)
+    
+    timeline.from(rects, { opacity: 0, stagger: .001, scale: 1.25, ease: Power4.easeOut, duration: 5 }, 1)
     
     // setShapes(element);
     timeline.play();
